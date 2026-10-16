@@ -2,9 +2,9 @@
 
 自托管看板：人类添加任务（每张卡指向一个 workspace 文件夹），自主 AI agent 通过语言无关的 REST API 接取、干活、上报阻碍、完成后交回，人类验收归档。单个 Go 二进制：REST API + SQLite + 内嵌网页（界面支持中文 / English）。
 
-自主 agent 接活、返工、交回的推荐方式是官方 **`light-kanban-worker` Skill**（[LightDevCoder/skills](https://github.com/LightDevCoder/skills) → `light-kanban-worker`）：定时 agent 安装一次即可，每次唤醒处理一张卡，自动完成领取、返工与交回。原始 REST API 对自定义 agent、脚本与集成仍然开放（见[手动 Agent 接入（不装 Skill 的 API 方式）](#手动-agent-接入api-方式不装-skill)）。Skill 行为的权威来源是其 [`SKILL.md`](https://github.com/LightDevCoder/skills/blob/main/skills/light-kanban-worker/SKILL.md)；本 README 只说明两者如何配合。
+自主 agent 接活、返工、交回的推荐方式是官方 **`light-kanban-worker` Skill**（[light-cheng/skills](https://github.com/light-cheng/skills) → `light-kanban-worker`）：定时 agent 安装一次即可，每次唤醒处理一张卡，自动完成领取、返工与交回。原始 REST API 对自定义 agent、脚本与集成仍然开放（见[手动 Agent 接入（不装 Skill 的 API 方式）](#手动-agent-接入api-方式不装-skill)）。Skill 行为的权威来源是其 [`SKILL.md`](https://github.com/light-cheng/skills/blob/main/skills/light-kanban-worker/SKILL.md)；本 README 只说明两者如何配合。
 
-[English README](README.md) · [下载（Releases）](https://github.com/LightDevCoder/light-kanban/releases)
+[English README](README.md) · [下载（Releases）](https://github.com/light-cheng/light-kanban/releases)
 
 完整规范、状态机与 API 契约见 `.scratch/task-board/spec.md`；领域词汇见 `CONTEXT.md`。
 
@@ -26,7 +26,7 @@
 
 ## 安装与运行（按平台）
 
-从 [Releases](https://github.com/LightDevCoder/light-kanban/releases) 页面下载对应你电脑的文件：
+从 [Releases](https://github.com/light-cheng/light-kanban/releases) 页面下载对应你电脑的文件：
 
 | 你的电脑 | 下载文件 |
 | --- | --- |
@@ -79,14 +79,14 @@ chmod +x light-kanban-linux-amd64
 
 ### 第一步 — 运行 Light-Kanban
 
-从 [Releases](https://github.com/LightDevCoder/light-kanban/releases) 下载对应你电脑的二进制（见上文[安装与运行](#安装与运行按平台)的表格），放进专用文件夹，**双击 / 直接执行**。浏览器自动打开看板 http://127.0.0.1:8641。（**其他电脑**上的 agent 需要 `-addr :8641`——见上文。）
+从 [Releases](https://github.com/light-cheng/light-kanban/releases) 下载对应你电脑的二进制（见上文[安装与运行](#安装与运行按平台)的表格），放进专用文件夹，**双击 / 直接执行**。浏览器自动打开看板 http://127.0.0.1:8641。（**其他电脑**上的 agent 需要 `-addr :8641`——见上文。）
 
 ### 第二步 — 安装 Worker Skill
 
 给你的 agent host 安装官方 worker Skill（推荐）：
 
 ```bash
-npx skills add LightDevCoder/skills#v0.1.5 \
+npx skills add light-cheng/skills#v0.1.5 \
   --skill light-kanban-worker \
   --yes \
   --copy \
@@ -95,7 +95,7 @@ npx skills add LightDevCoder/skills#v0.1.5 \
 
 没有 npx / 离线环境？本仓库自带同一 Skill 的**逐字节快照**（[`skills/light-kanban-worker/`](skills/light-kanban-worker/SKILL.md)）——把整个目录复制到 agent host 认可的 skills root（例如 `~/.agents/skills/light-kanban-worker`），刷新 host 即可。详见 [`skills/README.md`](skills/README.md)。
 
-来源与文档：[LightDevCoder/skills](https://github.com/LightDevCoder/skills) → [`skills/light-kanban-worker/`](https://github.com/LightDevCoder/skills/tree/main/skills/light-kanban-worker)（行为权威：其 `SKILL.md`）。兼容 Light-Kanban v1.0.4+。
+来源与文档：[light-cheng/skills](https://github.com/light-cheng/skills) → [`skills/light-kanban-worker/`](https://github.com/light-cheng/skills/tree/main/skills/light-kanban-worker)（行为权威：其 `SKILL.md`）。兼容 Light-Kanban v1.0.4+。
 
 ### 第三步 — 创建任务
 

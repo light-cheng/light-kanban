@@ -164,7 +164,7 @@ function main() {
   if (failures.length > 0) {
     console.error(`VENDOR_SKILL=FAIL (${failures.length} failures, ${manifestEntryCount} files checked)`);
     for (const f of failures) console.error(`FAIL: ${f}`);
-    console.error("Re-vendor from the upstream LightDevCoder/skills tag and regenerate skills/manifest.json — do not edit the snapshot in place.");
+    console.error("Re-vendor from the upstream light-cheng/skills tag and regenerate skills/manifest.json — do not edit the snapshot in place.");
     process.exit(1);
   }
   console.log(`VENDOR_SKILL=PASS (${manifestEntryCount} files match skills/manifest.json)`);

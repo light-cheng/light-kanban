@@ -2,7 +2,7 @@
   "vendor": {
     "package": "light-kanban-worker",
     "source": {
-      "repository": "https://github.com/LightDevCoder/skills",
+      "repository": "https://github.com/light-cheng/skills",
       "tag": "v0.1.5",
       "commit": "a56aa9d98de0b941ee2282144bc7e756ef5e48bd",
       "path": "skills/light-kanban-worker"
