@@ -62,7 +62,7 @@ jobs:
 
       # v1.0.5: the vendored light-kanban-worker Skill snapshot must match
       # skills/manifest.json (SHA-256 pinned from the upstream
-      # LightDevCoder/skills release tag); the script self-test exercises
+      # light-cheng/skills release tag); the script self-test exercises
       # positive and negative fixtures.
       - name: Verify vendored Worker Skill snapshot
         run: |

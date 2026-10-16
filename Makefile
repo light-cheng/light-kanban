@@ -40,7 +40,7 @@ cross: frontend-build
 
 # Integrity guard for the vendored light-kanban-worker Skill snapshot
 # (skills/light-kanban-worker/): every file must match skills/manifest.json
-# (SHA-256 pinned from the upstream LightDevCoder/skills release tag).
+# (SHA-256 pinned from the upstream light-cheng/skills release tag).
 # The script also carries a --self-test with positive/negative fixtures.
 check-vendor:
 	node scripts/verify-vendored-skill.cjs

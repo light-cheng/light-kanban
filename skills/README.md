@@ -1,23 +1,23 @@
 # light-kanban-worker — vendored snapshot（随仓库附带的 Worker Skill 副本）
 
 > English summary: `skills/light-kanban-worker/` is a **byte-identical snapshot** of the
-> first-party `light-kanban-worker` Skill from `LightDevCoder/skills` tag `v0.1.5`
+> first-party `light-kanban-worker` Skill from `light-cheng/skills` tag `v0.1.5`
 > (commit recorded in `skills/manifest.json`), vendored so users can install the Worker without running `npx`.
 > The upstream repository is the behavioral authority. Integrity is pinned by
 > `skills/manifest.json` and checked by `make check` (see `scripts/verify-vendored-skill.cjs`).
 
 ## 这是什么
 
-`skills/light-kanban-worker/` 是官方第一方 Worker Skill（[LightDevCoder/skills](https://github.com/LightDevCoder/skills) → `skills/light-kanban-worker`）在 `v0.1.5` tag（commit 见 `skills/manifest.json`）上的**逐字节快照**，随 Light-Kanban 仓库一起分发，供不想（或不能）用 `npx skills add` 的用户手动安装。
+`skills/light-kanban-worker/` 是官方第一方 Worker Skill（[light-cheng/skills](https://github.com/light-cheng/skills) → `skills/light-kanban-worker`）在 `v0.1.5` tag（commit 见 `skills/manifest.json`）上的**逐字节快照**，随 Light-Kanban 仓库一起分发，供不想（或不能）用 `npx skills add` 的用户手动安装。
 
-**行为权威永远是上游**：`LightDevCoder/skills` 的 `skills/light-kanban-worker/SKILL.md`。本目录只是安装载体，不是第二个真相源。
+**行为权威永远是上游**：`light-cheng/skills` 的 `skills/light-kanban-worker/SKILL.md`。本目录只是安装载体，不是第二个真相源。
 
 ## 两种安装方式
 
 ### 方式一（推荐）：从 skills 仓库安装
 
 ```bash
-npx skills add LightDevCoder/skills#v0.1.5 --skill light-kanban-worker --yes --copy --agent '*'
+npx skills add light-cheng/skills#v0.1.5 --skill light-kanban-worker --yes --copy --agent '*'
 ```
 
 ### 方式二：手动复制本目录（离线 / 无 npx）
