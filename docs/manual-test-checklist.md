@@ -217,7 +217,7 @@
 
 | # | 测什么 | 怎么测 | 预期结果 | 结果 | 评论（留给我） |
 |---|--------|--------|----------|------|--------------|
-| S1 | 安装 Worker Skill | `npx skills add LightDevCoder/skills#v0.1.5 --skill light-kanban-worker --yes --copy --agent '*'` | 安装成功；`npx --yes skills list` 列出 `light-kanban-worker`（不依赖源码 checkout） | |
+| S1 | 安装 Worker Skill | `npx skills add light-cheng/skills#v0.1.5 --skill light-kanban-worker --yes --copy --agent '*'` | 安装成功；`npx --yes skills list` 列出 `light-kanban-worker`（不依赖源码 checkout） | |
 | S1b | 手动复制安装（离线 / 无 npx） | 把本仓库 `skills/light-kanban-worker/` 整个目录复制到 host 认可的 skills root（如 `~/.agents/skills/light-kanban-worker`），刷新 host | host 的 skill 列表能发现 `light-kanban-worker`；`node scripts/verify-vendored-skill.cjs` 输出 `VENDOR_SKILL=PASS (14 files …)` | |
 | S2 | 一次性手动运行（已注册身份） | 建一张 todo 卡后，用 prompt「Use light-kanban-worker to process one task from http://127.0.0.1:8641 as agent codex-main.」跑一次（前提：codex-main 已注册） | Agent 领取该卡 → 进入 workspace 执行 → `complete` → 卡片到**等你确认**，本次运行结束 | |
 | S3 | 定时 prompt | 用 README Quick Start 第四步的 scheduler prompt 创建每 15 分钟（或更短）的定时任务 | 每次唤醒只处理一张卡；没有卡时正常结束，不新建任务、不卡死 | |

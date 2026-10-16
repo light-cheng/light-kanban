@@ -10,7 +10,7 @@ A single-binary Go kanban board: a human queues tasks (each card points at a wor
 - `internal/webui/` — `webui.go` embeds `dist/` via `go:embed`; **`dist/` is the committed production build of the frontend**
 - `frontend/` — React 18 + TypeScript + Vite app (the real UI source; see ADR-0002)
 - `scripts/` — `fetch-go.cjs` / `goenv.ps1` / `cross-build.ps1` / `make-checklist-xlsx.cjs` / `seed-demo.cjs` / `verify-vendored-skill.cjs`
-- `skills/light-kanban-worker/` — **vendored snapshot** of the official worker Skill from `LightDevCoder/skills` (see `skills/README.md`); integrity pinned by `skills/manifest.json` and checked by `make check`/CI
+- `skills/light-kanban-worker/` — **vendored snapshot** of the official worker Skill from `light-cheng/skills` (see `skills/README.md`); integrity pinned by `skills/manifest.json` and checked by `make check`/CI
 
 ## Run / build / test
 
@@ -31,7 +31,7 @@ A single-binary Go kanban board: a human queues tasks (each card points at a wor
 - **i18n is dual-source**: `frontend/src/i18n/zh.ts` is the key schema; `en.ts` must stay structurally identical (tsc enforces it).
 - **Red-green discipline**: new behavior starts with a failing test at one of the agreed seams (Go: HTTP API / store / cmd; frontend: the ProductTour pure-logic module).
 - **Embedded dist ships with its source**: every change to `frontend/src/` must commit the regenerated `internal/webui/dist/` in the same commit (`make frontend-build`, then verify with `make check`) — otherwise the shipped binary silently keeps the old UI.
-- **Vendored Skill snapshot is read-only**: never edit files under `skills/light-kanban-worker/` in place. The behavioral authority is the upstream `LightDevCoder/skills` repository; to upgrade, re-vendor from the new upstream tag (byte-identical copy), regenerate `skills/manifest.json` (repository, tag, commit SHA, package path, per-file SHA-256) and update `skills/README.md` — `make check` (and CI) fail on any drift via `scripts/verify-vendored-skill.cjs`, which enforces the exact file set: manifest-listed files must match byte-for-byte, and no unlisted file may exist.
+- **Vendored Skill snapshot is read-only**: never edit files under `skills/light-kanban-worker/` in place. The behavioral authority is the upstream `light-cheng/skills` repository; to upgrade, re-vendor from the new upstream tag (byte-identical copy), regenerate `skills/manifest.json` (repository, tag, commit SHA, package path, per-file SHA-256) and update `skills/README.md` — `make check` (and CI) fail on any drift via `scripts/verify-vendored-skill.cjs`, which enforces the exact file set: manifest-listed files must match byte-for-byte, and no unlisted file may exist.
 
 ## Agent skills
 
