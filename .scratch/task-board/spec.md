@@ -249,3 +249,10 @@ change, no state-machine change**.
   test) PASS; multi-agent regression (two agents, atomic claim, one winner
   per card) PASS.
 
+
+## First-Party `kanban-worker` Consolidation
+
+Following the `light-cheng/skills` v1.0 rebuild, the Worker Skill is consolidated directly into `light-cheng/light-kanban` under `skills/kanban-worker/` as its single first-party authoritative source (superseding the read-only vendored `skills/light-kanban-worker/` snapshot, `skills/manifest.json`, and `scripts/verify-vendored-skill.cjs` from v1.0.5/v1.0.6):
+
+- **Install directly from this repository**: `npx skills add light-cheng/light-kanban --skill kanban-worker --yes --copy --agent '*'`, or copy `skills/kanban-worker/` into an agent host's skills root offline.
+- **Automated gate (`make check-skill`)**: `make check` and `.github/workflows/ci.yml` execute `python3 -B -m unittest discover -s skills/kanban-worker/tests -p "test_*.py"`, exercising positive contract/behavior assertions and six adversarial negative fixtures directly against `skills/kanban-worker/`.

@@ -217,9 +217,9 @@
 
 | # | 测什么 | 怎么测 | 预期结果 | 结果 | 评论（留给我） |
 |---|--------|--------|----------|------|--------------|
-| S1 | 安装 Worker Skill | `npx skills add LightDevCoder/skills#v0.1.5 --skill light-kanban-worker --yes --copy --agent '*'` | 安装成功；`npx --yes skills list` 列出 `light-kanban-worker`（不依赖源码 checkout） | |
-| S1b | 手动复制安装（离线 / 无 npx） | 把本仓库 `skills/light-kanban-worker/` 整个目录复制到 host 认可的 skills root（如 `~/.agents/skills/light-kanban-worker`），刷新 host | host 的 skill 列表能发现 `light-kanban-worker`；`node scripts/verify-vendored-skill.cjs` 输出 `VENDOR_SKILL=PASS (14 files …)` | |
-| S2 | 一次性手动运行（已注册身份） | 建一张 todo 卡后，用 prompt「Use light-kanban-worker to process one task from http://127.0.0.1:8641 as agent codex-main.」跑一次（前提：codex-main 已注册） | Agent 领取该卡 → 进入 workspace 执行 → `complete` → 卡片到**等你确认**，本次运行结束 | |
+| S1 | 安装 Worker Skill | `npx skills add light-cheng/light-kanban --skill kanban-worker --yes --copy --agent '*'` | 安装成功；`npx --yes skills list` 列出 `kanban-worker`（不依赖源码 checkout） | |
+| S1b | 手动复制安装（离线 / 无 npx） | 把本仓库 `skills/kanban-worker/` 整个目录复制到 host 认可的 skills root（如 `~/.agents/skills/kanban-worker`），刷新 host | host 的 skill 列表能发现 `kanban-worker`；`make check-skill` 通过 | |
+| S2 | 一次性手动运行（已注册身份） | 建一张 todo 卡后，用 prompt「Use kanban-worker to process one task from http://127.0.0.1:8641 as agent codex-main.」跑一次（前提：codex-main 已注册） | Agent 领取该卡 → 进入 workspace 执行 → `complete` → 卡片到**等你确认**，本次运行结束 | |
 | S3 | 定时 prompt | 用 README Quick Start 第四步的 scheduler prompt 创建每 15 分钟（或更短）的定时任务 | 每次唤醒只处理一张卡；没有卡时正常结束，不新建任务、不卡死 | |
 | S4 | 退回修改闭环 | 对**等你确认**卡点「退回修改」并附反馈 | 下一次唤醒同一 Agent 优先处理该卡，按反馈修改后重新 `complete` 到**等你确认**；不需要新建任务 | |
 | S5 | workspace 缺失 | 新建一张 workspace 路径不存在的卡 | Worker 领取后 block，卡上显示「Workspace path is not accessible from this agent host.」 | |
@@ -237,7 +237,7 @@
 | T2 | 缺 avatar 不注册 | 换另一个全新 agentId，one-shot prompt 只给 ID + Name、**不给 Avatar** | Worker 报告身份配置缺失，不 claim、不改动任何任务，运行结束；数据库任务无变化 | |
 | T3 | 调度并发 = 1 | 用真实 scheduler 的 `max concurrency = 1`（对同一 agentId）配置定时任务；没有该能力时用明确可重复的 scheduler lock fixture 验证 | 同一 agentId 的上一个 run 仍活跃时，下一次调度**不得**启动第二个处理 run（这是 scheduler 契约，不是 Light-Kanban 服务器 lock） | |
 | T4 | 多 Agent 回归 | `codex-main` 与 `claude-code` 同时运行两个 worker 领取同一批 todo | 原子 claim：每张卡恰好一个赢家，两个 agent 拿到**不同**任务；不因 v1.0.6 的 non-overlap 文档调整被误伤 | |
-| T5 | vendored 快照完整性 | 运行 `node scripts/verify-vendored-skill.cjs` 与 `node scripts/verify-vendored-skill.cjs --self-test` | `VENDOR_SKILL=PASS (14 files …)` 且 `VENDOR_SELF_TEST=PASS (8 assertions)`；改动 / 删除 / 新增快照内文件都会 FAIL（自测覆盖三类负例） | |
+| T5 | Worker Skill 契约与行为测试 | 运行 `make check-skill`（`python3 -B -m unittest discover -s skills/kanban-worker/tests -p "test_*.py"`） | 全部正向契约与 6 类对抗性负例断言 `OK` 通过 | |
 
 ---
 

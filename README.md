@@ -2,9 +2,9 @@
 
 A self-hosted kanban board where a human queues tasks (each card points at a workspace folder) and autonomous agents claim, work, block on, and return them for human confirmation. Single Go binary: REST API + SQLite + embedded web UI (English / 中文).
 
-The recommended way for autonomous agents to work the board is the official **`light-kanban-worker` Skill** ([LightDevCoder/skills](https://github.com/LightDevCoder/skills) → `light-kanban-worker`): a scheduled agent installs it once and handles one task per wake-up — claiming, reworking, and returning work automatically. The raw REST API stays available for custom agents, scripts, and integrations (see [Manual Agent Integration](#manual-agent-integration-api-without-the-skill)). The authoritative Skill behavior lives in its [`SKILL.md`](https://github.com/LightDevCoder/skills/blob/main/skills/light-kanban-worker/SKILL.md); this README shows how the two fit together.
+The recommended way for autonomous agents to work the board is the official **`kanban-worker` Skill** ([`skills/kanban-worker/`](skills/kanban-worker/SKILL.md) in `light-cheng/light-kanban`): a scheduled agent installs it once and handles one task per wake-up — claiming, reworking, and returning work automatically. The raw REST API stays available for custom agents, scripts, and integrations (see [Manual Agent Integration](#manual-agent-integration-api-without-the-skill)). The authoritative Skill behavior lives in [`skills/kanban-worker/SKILL.md`](skills/kanban-worker/SKILL.md); this README shows how the two fit together.
 
-[中文 README](README_CN.md) · [Download](https://github.com/LightDevCoder/light-kanban/releases)
+[中文 README](README_CN.md) · [Download](https://github.com/light-cheng/light-kanban/releases)
 
 See `.scratch/task-board/spec.md` for the full spec, the state machine, and the API contract. See `CONTEXT.md` for the domain vocabulary.
 
@@ -26,7 +26,7 @@ See `.scratch/task-board/spec.md` for the full spec, the state machine, and the 
 
 ## Install & Run (per platform)
 
-Pick the file for your machine from the [Releases](https://github.com/LightDevCoder/light-kanban/releases) page:
+Pick the file for your machine from the [Releases](https://github.com/light-cheng/light-kanban/releases) page:
 
 | Your machine | Download |
 | --- | --- |
@@ -79,23 +79,23 @@ Five steps get you from zero to **Light-Kanban + a scheduled agent** in about fi
 
 ### Step 1 — Run Light-Kanban
 
-Download the binary for your machine from [Releases](https://github.com/LightDevCoder/light-kanban/releases) (see the table under [Install & Run](#install--run-per-platform)), put it in a dedicated folder, and **double-click / execute it**. The browser opens the board automatically at http://127.0.0.1:8641. (Agents on *other machines* need `-addr :8641` — see above.)
+Download the binary for your machine from [Releases](https://github.com/light-cheng/light-kanban/releases) (see the table under [Install & Run](#install--run-per-platform)), put it in a dedicated folder, and **double-click / execute it**. The browser opens the board automatically at http://127.0.0.1:8641. (Agents on *other machines* need `-addr :8641` — see above.)
 
 ### Step 2 — Install the Worker Skill
 
-Install the official worker Skill for your agent host (recommended):
+Install the official worker Skill directly from this repository (recommended):
 
 ```bash
-npx skills add LightDevCoder/skills#v0.1.5 \
-  --skill light-kanban-worker \
+npx skills add light-cheng/light-kanban \
+  --skill kanban-worker \
   --yes \
   --copy \
   --agent '*'
 ```
 
-No `npx` / offline? This repository ships the same Skill as a byte-identical snapshot in [`skills/light-kanban-worker/`](skills/light-kanban-worker/SKILL.md) — copy the whole folder into your agent host's recognized skills root (e.g. `~/.agents/skills/light-kanban-worker`) and refresh the host. See [`skills/README.md`](skills/README.md).
+No `npx` / offline? Copy [`skills/kanban-worker/`](skills/kanban-worker/SKILL.md) directly into your agent host's recognized skills root (e.g. `~/.agents/skills/kanban-worker`) and refresh the host. See [`skills/README.md`](skills/README.md).
 
-Source and docs: [LightDevCoder/skills](https://github.com/LightDevCoder/skills) → [`skills/light-kanban-worker/`](https://github.com/LightDevCoder/skills/tree/main/skills/light-kanban-worker) (behavior authority: its `SKILL.md`). Works with Light-Kanban v1.0.4+.
+Source and docs: [`skills/kanban-worker/SKILL.md`](skills/kanban-worker/SKILL.md) (first-party behavioral authority in this repository). Works with Light-Kanban v1.0.4+.
 
 ### Step 3 — Create Work
 
@@ -115,7 +115,7 @@ The task lands in **To Do**.
 Point your scheduler at this prompt (any scheduler product that can run your agent on a timer — cron, an orchestrator, a scheduled agent job):
 
 ```text
-Use light-kanban-worker to process at most one Light-Kanban task.
+Use kanban-worker to process at most one Light-Kanban task.
 
 Light-Kanban URL:
 http://127.0.0.1:8641
@@ -147,7 +147,7 @@ Prefer a one-shot test before creating the schedule? Run the agent once
 manually with the full first-run form:
 
 ```text
-Use light-kanban-worker to process one Light-Kanban task.
+Use kanban-worker to process one Light-Kanban task.
 
 Light-Kanban URL:
 http://127.0.0.1:8641
@@ -163,7 +163,7 @@ Agent Avatar:
 After the first successful registration you can simplify to:
 
 ```text
-Use light-kanban-worker to process one task from
+Use kanban-worker to process one task from
 http://127.0.0.1:8641 as agent codex-main.
 ```
 
@@ -175,7 +175,7 @@ When the agent finishes, the task sits in **Awaiting Confirmation**. Open the ca
 
 ### Scheduled coding agent
 
-Queue several coding tasks before leaving work. Every 15 minutes the agent wakes, `light-kanban-worker` picks **one** task, works in its workspace, and sends the result to **Awaiting Confirmation** — you review the batch later. Asynchronous backlog processing with zero per-task babysitting.
+Queue several coding tasks before leaving work. Every 15 minutes the agent wakes, `kanban-worker` picks **one** task, works in its workspace, and sends the result to **Awaiting Confirmation** — you review the batch later. Asynchronous backlog processing with zero per-task babysitting.
 
 ### Multiple agents sharing one queue
 
@@ -240,7 +240,7 @@ It is **not** an agent runtime, a cron scheduler, a CI replacement, or a cloud o
 
 ## Manual Agent Integration (API without the Skill)
 
-Custom agents, n8n flows, shell scripts, or Python workers can drive the same board through the raw REST API. This is the fallback path — the recommended autonomous-agent path is the `light-kanban-worker` Skill above.
+Custom agents, n8n flows, shell scripts, or Python workers can drive the same board through the raw REST API. This is the fallback path — the recommended autonomous-agent path is the `kanban-worker` Skill above.
 
 ```sh
 curl "http://127.0.0.1:8641/api/tasks?status=todo"             # find available work (todo only)

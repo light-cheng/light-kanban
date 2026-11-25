@@ -1,4 +1,4 @@
-"""Behavior tests for the first-party light-kanban-worker Skill.
+"""Behavior tests for the first-party kanban-worker Skill.
 
 Pins the workflow ordering and the failure-mode rules of the worker contract:
 golden-flow order, review-feedback priority, one-task-per-run, human-only
@@ -13,15 +13,10 @@ import sys
 import unittest
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent  # skills/light-kanban-worker/
-REPO_ROOT = ROOT.parents[1]  # repository root
-sys.path.insert(0, str(REPO_ROOT / "tests"))
+ROOT = Path(__file__).resolve().parent.parent  # skills/kanban-worker/
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-try:  # repository harness (source checkout)
-    from check_helpers import Checks, read  # noqa: E402
-except ImportError:  # installed package copy without the repository harness
-    from worker_checks import Checks, read  # noqa: E402
+from worker_checks import Checks, read  # noqa: E402
 from worker_checks import (  # noqa: E402
     blocks_on_workspace_failure,
     existing_work_before_new_work,

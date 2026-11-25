@@ -2,9 +2,9 @@
 
 自托管看板：人类添加任务（每张卡指向一个 workspace 文件夹），自主 AI agent 通过语言无关的 REST API 接取、干活、上报阻碍、完成后交回，人类验收归档。单个 Go 二进制：REST API + SQLite + 内嵌网页（界面支持中文 / English）。
 
-自主 agent 接活、返工、交回的推荐方式是官方 **`light-kanban-worker` Skill**（[LightDevCoder/skills](https://github.com/LightDevCoder/skills) → `light-kanban-worker`）：定时 agent 安装一次即可，每次唤醒处理一张卡，自动完成领取、返工与交回。原始 REST API 对自定义 agent、脚本与集成仍然开放（见[手动 Agent 接入（不装 Skill 的 API 方式）](#手动-agent-接入api-方式不装-skill)）。Skill 行为的权威来源是其 [`SKILL.md`](https://github.com/LightDevCoder/skills/blob/main/skills/light-kanban-worker/SKILL.md)；本 README 只说明两者如何配合。
+自主 agent 接活、返工、交回的推荐方式是官方 **`kanban-worker` Skill**（本仓库 [`skills/kanban-worker/`](skills/kanban-worker/SKILL.md)）：定时 agent 安装一次即可，每次唤醒处理一张卡，自动完成领取、返工与交回。原始 REST API 对自定义 agent、脚本与集成仍然开放（见[手动 Agent 接入（不装 Skill 的 API 方式）](#手动-agent-接入api-方式不装-skill)）。Skill 行为的权威来源就是本仓库内的 [`skills/kanban-worker/SKILL.md`](skills/kanban-worker/SKILL.md)；本 README 只说明两者如何配合。
 
-[English README](README.md) · [下载（Releases）](https://github.com/LightDevCoder/light-kanban/releases)
+[English README](README.md) · [下载（Releases）](https://github.com/light-cheng/light-kanban/releases)
 
 完整规范、状态机与 API 契约见 `.scratch/task-board/spec.md`；领域词汇见 `CONTEXT.md`。
 
@@ -26,7 +26,7 @@
 
 ## 安装与运行（按平台）
 
-从 [Releases](https://github.com/LightDevCoder/light-kanban/releases) 页面下载对应你电脑的文件：
+从 [Releases](https://github.com/light-cheng/light-kanban/releases) 页面下载对应你电脑的文件：
 
 | 你的电脑 | 下载文件 |
 | --- | --- |
@@ -79,23 +79,23 @@ chmod +x light-kanban-linux-amd64
 
 ### 第一步 — 运行 Light-Kanban
 
-从 [Releases](https://github.com/LightDevCoder/light-kanban/releases) 下载对应你电脑的二进制（见上文[安装与运行](#安装与运行按平台)的表格），放进专用文件夹，**双击 / 直接执行**。浏览器自动打开看板 http://127.0.0.1:8641。（**其他电脑**上的 agent 需要 `-addr :8641`——见上文。）
+从 [Releases](https://github.com/light-cheng/light-kanban/releases) 下载对应你电脑的二进制（见上文[安装与运行](#安装与运行按平台)的表格），放进专用文件夹，**双击 / 直接执行**。浏览器自动打开看板 http://127.0.0.1:8641。（**其他电脑**上的 agent 需要 `-addr :8641`——见上文。）
 
 ### 第二步 — 安装 Worker Skill
 
-给你的 agent host 安装官方 worker Skill（推荐）：
+直接从本仓库给你的 agent host 安装官方 worker Skill（推荐）：
 
 ```bash
-npx skills add LightDevCoder/skills#v0.1.5 \
-  --skill light-kanban-worker \
+npx skills add light-cheng/light-kanban \
+  --skill kanban-worker \
   --yes \
   --copy \
   --agent '*'
 ```
 
-没有 npx / 离线环境？本仓库自带同一 Skill 的**逐字节快照**（[`skills/light-kanban-worker/`](skills/light-kanban-worker/SKILL.md)）——把整个目录复制到 agent host 认可的 skills root（例如 `~/.agents/skills/light-kanban-worker`），刷新 host 即可。详见 [`skills/README.md`](skills/README.md)。
+没有 npx / 离线环境？直接把本仓库自带的 [`skills/kanban-worker/`](skills/kanban-worker/SKILL.md) 整个目录复制到 agent host 认可的 skills root（例如 `~/.agents/skills/kanban-worker`），刷新 host 即可。详见 [`skills/README.md`](skills/README.md)。
 
-来源与文档：[LightDevCoder/skills](https://github.com/LightDevCoder/skills) → [`skills/light-kanban-worker/`](https://github.com/LightDevCoder/skills/tree/main/skills/light-kanban-worker)（行为权威：其 `SKILL.md`）。兼容 Light-Kanban v1.0.4+。
+来源与文档：本仓库 [`skills/kanban-worker/SKILL.md`](skills/kanban-worker/SKILL.md)（第一方唯一行为权威）。兼容 Light-Kanban v1.0.4+。
 
 ### 第三步 — 创建任务
 
@@ -115,7 +115,7 @@ Workspace：~/projects/my-app
 把下面这段 prompt 交给你的 scheduler（任何能定时运行 agent 的产品——cron、编排器、定时 agent 任务均可）：
 
 ```text
-Use light-kanban-worker to process at most one Light-Kanban task.
+Use kanban-worker to process at most one Light-Kanban task.
 
 Light-Kanban URL:
 http://127.0.0.1:8641
@@ -145,7 +145,7 @@ codex-main run 还在运行时，不要再启动新的 run。不同 Agent ID 可
 想先手动测一次再建定时任务？用能完成首次注册的完整一次性 prompt：
 
 ```text
-Use light-kanban-worker to process one Light-Kanban task.
+Use kanban-worker to process one Light-Kanban task.
 
 Light-Kanban URL:
 http://127.0.0.1:8641
@@ -161,7 +161,7 @@ Agent Avatar:
 首次注册成功后，可以简化为：
 
 ```text
-Use light-kanban-worker to process one task from
+Use kanban-worker to process one task from
 http://127.0.0.1:8641 as agent codex-main.
 ```
 
@@ -173,7 +173,7 @@ Agent 完成后，任务进入**等你确认**。打开卡片——**验收通�
 
 ### 定时编码 Agent
 
-下班前排好几张编码任务。每 15 分钟 agent 醒来一次，`light-kanban-worker` 领取**一张**任务、在对应 workspace 里干活、把结果送到**等你确认**——你稍后批量验收。异步积压工作，零逐卡跟进。
+下班前排好几张编码任务。每 15 分钟 agent 醒来一次，`kanban-worker` 领取**一张**任务、在对应 workspace 里干活、把结果送到**等你确认**——你稍后批量验收。异步积压工作，零逐卡跟进。
 
 ### 多个 Agent 共享一个队列
 
@@ -237,7 +237,7 @@ Agent 完成任务
 
 ## 手动 Agent 接入（API 方式，不装 Skill）
 
-自定义 agent、n8n 流程、shell 脚本或 Python worker 可以直接用原始 REST API 驱动同一块看板。这是备用路径——自主 agent 的推荐路径是上面的 `light-kanban-worker` Skill。
+自定义 agent、n8n 流程、shell 脚本或 Python worker 可以直接用原始 REST API 驱动同一块看板。这是备用路径——自主 agent 的推荐路径是上面的 `kanban-worker` Skill。
 
 ```sh
 curl "http://127.0.0.1:8641/api/tasks?status=todo"             # 找可接的活（只看待处理）
