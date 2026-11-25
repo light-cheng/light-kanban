@@ -5,7 +5,7 @@
 
 ## 1. 当前状态
 
-- **远端仓库**：https://github.com/LightDevCoder/light-kanban（public，gh 账号 LightDevCoder）
+- **远端仓库**：https://github.com/light-cheng/light-kanban（public，gh 账号 light-cheng）
 - **最新发布**：`v1.0.6`（Worker 维护发布），tag `v1.0.6` + GitHub Release 齐全，四平台二进制（Windows amd64 / Linux amd64 / macOS amd64 / macOS arm64）+ `light-kanban-worker.zip`（Skills v0.1.5 快照）已作为 release 资产上传；`v1.0.5` 及更早的 tag / Release / 二进制保持原样
 - **当前工作**：v1.0.6 为最新稳定版本
 - **工作树**：与 origin/main 一致
@@ -103,11 +103,11 @@
 ```sh
 # 1. 安装工具链
 brew install go gh node
-gh auth login                    # 登录 GitHub（LightDevCoder）
+gh auth login                    # 登录 GitHub（light-cheng）
 gh auth setup-git                # 让 git 走 gh 令牌
 
 # 2. 拉代码
-git clone https://github.com/LightDevCoder/light-kanban.git
+git clone https://github.com/light-cheng/light-kanban.git
 cd light-kanban
 
 # 3. 构建与测试（Makefile；前端产物已随仓库提交，纯看 Go 可不装 node）
