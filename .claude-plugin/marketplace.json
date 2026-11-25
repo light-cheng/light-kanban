@@ -1,0 +1,23 @@
+{
+  "name": "light-kanban",
+  "owner": {
+    "name": "Light Cheng",
+    "url": "https://github.com/light-cheng"
+  },
+  "description": "Official kanban-worker skill for autonomous task execution against Light-Kanban.",
+  "plugins": [
+    {
+      "name": "light-kanban",
+      "source": "./",
+      "description": "Official kanban-worker skill for claiming, executing, blocking, and returning tasks on a Light-Kanban board.",
+      "category": "productivity",
+      "keywords": [
+        "agent-skills",
+        "claude-code",
+        "kanban",
+        "task-board",
+        "automation"
+      ]
+    }
+  ]
+}

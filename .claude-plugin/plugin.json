@@ -1,0 +1,21 @@
+{
+  "name": "light-kanban",
+  "version": "1.0.6",
+  "description": "Official kanban-worker skill for claiming, executing, blocking, and returning tasks on a Light-Kanban board.",
+  "author": {
+    "name": "Light Cheng",
+    "url": "https://github.com/light-cheng"
+  },
+  "homepage": "https://github.com/light-cheng/light-kanban",
+  "repository": "https://github.com/light-cheng/light-kanban",
+  "keywords": [
+    "agent-skills",
+    "claude-code",
+    "kanban",
+    "task-board",
+    "automation"
+  ],
+  "skills": [
+    "./skills/kanban-worker"
+  ]
+}
